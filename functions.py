@@ -220,9 +220,8 @@ if __name__ == "__main__": # FIX: this ran (and printed) every time another file
 
 
 
-def data_extraction_past_v3(symbol,interval_1,interval_2,start_time1,start_time2,limit,headers):
+def data_extraction_past_v3(symbol,interval_1,start_time1,limit,headers): # FIX: dropped interval_2/start_time2, v3 no longer collects 5m data (data_5m.db never had my_table, so the 5m insert crashed)
     start_time1 = date_to_milliseconds(start_time1)
-    start_time2 = date_to_milliseconds(start_time2)
     url = "https://api.binance.com/api/v3/klines"
     params_1m = {
         "symbol": symbol,
@@ -254,37 +253,7 @@ def data_extraction_past_v3(symbol,interval_1,interval_2,start_time1,start_time2
 
     #print(end_1m)
 
-    
-    params_5m = {
-        "symbol": symbol,
-        "interval": interval_2,
-        "startTime":start_time2,
-        "limit":limit
-    }
-
-    resp = requests.get(url, params=params_5m)
-    data_5m = resp.json()
-
-    price_5m = pd.DataFrame(data_5m, columns=[
-        "Open Time", "Open", "High", "Low", "Close", "Volume",
-        "Close Time", "Quote Asset Volume", "Trades",
-        "Taker Buy Base", "Taker Buy Quote", "Ignore"
-    ])
-    price_5m = price_5m.drop('Ignore', axis = 1) #DROP THE IGNORE CUZ ITS A NUISANCE TO BE IGNORED
-
-    #convert str to float
-    convert_float(price_5m)
-
-    #convert df to list
-    price_5m = price_5m.values.tolist()
-
-    #Time frame returning time
-    siu = len(price_5m) -1
-    end_5m = price_5m[siu][6] + 1 # FIX: was the last bar's Open Time (same leak as end_1m); Close Time + 1 ms = open of the next bar
-    last_close_5m = price_5m[siu][4]
-    last_close_5m =float(last_close_5m)
-
-    #print(end_5m, 'end_5m')
+    # FIX: removed the 20 historical 5m candles request, nothing downstream reads 5m data
     params_1m = {
         "symbol": symbol,
         "interval": interval_1,
@@ -302,28 +271,8 @@ def data_extraction_past_v3(symbol,interval_1,interval_2,start_time1,start_time2
     close_1m = data_1m["Close"].values.tolist()
     close_1m = list(map(float,close_1m))
     y_1m = sum(close_1m)/len(close_1m)
-    
-    #let dependent variable be the avg closing price for the next 3 '5m' candles
-    params_5m = {
-    "symbol": symbol,
-    "interval": interval_2,
-    "startTime": int(end_5m), #cannot process float must be int
-    "limit": 3 # up to 1000
-    }
 
-    resp = requests.get(url, params=params_5m)
-    data_5m = resp.json()
-
-    data_5m = pd.DataFrame(data_5m, columns=[
-        "Open Time", "Open", "High", "Low", "Close", "Volume",
-        "Close Time", "Quote Asset Volume", "Trades",
-        "Taker Buy Base", "Taker Buy Quote","Ignore"
-    ])
-
-
-    close_5m = data_5m["Close"].values.tolist()
-    close_5m = list(map(float,close_5m))
-    y_5m = sum(close_5m)/len(close_5m)
+    # FIX: removed the next 3 '5m' candles request (the 5m label)
 
 
     new_data = []
@@ -351,30 +300,4 @@ def data_extraction_past_v3(symbol,interval_1,interval_2,start_time1,start_time2
     cursor.close() #CLOSE CURSOR WHEN DONE
     conn.close()  #CLOSE CONNECTION WHEN DONE
 
-
-    new_data = []
-    
-
-    for i in range(len(price_5m[0])):
-
-        for c in range(len(price_5m)):
-            new_data.append(price_5m[c][i])
-
-
-    #print(new_data, "siu")
-    new_data.append(y_5m)
-    new_data.append(last_close_5m)
-
-
-    #connect 
-    conn = sqlite3.connect("data_5m.db")
-    cursor = conn.cursor()
-
-    #placeholder generation
-    placeholders = ", ".join(["?"]*len(headers))
-
-    #append data
-    cursor.execute(f"INSERT INTO my_table VALUES ({placeholders})", new_data) 
-    conn.commit() #COMMIT THE CHANGES AKA SAVE THE CHANGES
-    cursor.close() #CLOSE CURSOR WHEN DONE
-    conn.close()  #CLOSE CONNECTION WHEN DONE
+    # FIX: removed the insert into data_5m.db, that database never had my_table so on a fresh run the miner crashed on its first sample (sqlite3.OperationalError)

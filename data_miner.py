@@ -44,7 +44,7 @@ while i != 0:
 
     #as some dates do not have data, this could break the loop due to an error.
     try: 
-        data_extraction_past_v3("BTCUSDT","1m","5m",end_time,end_time,limit,headers)
+        data_extraction_past_v3("BTCUSDT","1m",end_time,limit,headers) # FIX: v3 no longer takes the 5m interval/start time
         i += 1 
         if i == 100:
             i = 1
