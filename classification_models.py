@@ -1,4 +1,5 @@
-from sklearn.model_selection import cross_validate
+from sklearn.model_selection import cross_validate, TimeSeriesSplit # FIX: TimeSeriesSplit replaces random K-fold
+from sklearn.dummy import DummyClassifier # FIX: baseline to compare the models against
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
@@ -16,6 +17,7 @@ models = {
     "Random Forest Classifier": RandomForestClassifier(),
     "SVC": SVC(),
     "K Neighbors Classifier": KNeighborsClassifier(),
+    "Dummy (most frequent)": DummyClassifier(strategy="most_frequent"), # FIX: always guesses the majority class, a model has to beat this to be useful
 }
 
 #connect to SQLite DB
@@ -27,6 +29,7 @@ df = pd.read_sql_query("SELECT * FROM my_table_cleaned", conn)
 #
 conn.close()
 df = df.drop_duplicates()
+df = df.sort_values('Open Time0').reset_index(drop = True) # FIX: rows are mined at random dates, sort by time so the CV folds train on the past and test on the future
 
 #retrieve x-axis
 
@@ -44,11 +47,15 @@ y = (df['y'] >df['last_close']).astype(int) #converting y into boolean
 
 
 print(y)
+print(y.value_counts(normalize = True)) # FIX: class balance, tells you what accuracy the Dummy baseline gets for free
 
 
 siu = [0,0,0]
 lowest = [0.5,0,0]
 results = {}
+
+#walk forward folds: each fold trains on earlier rows and tests on the rows after them
+cv = TimeSeriesSplit(n_splits = 5) # FIX: cv=5 (StratifiedKFold) split rows in random-date order, so models trained on the future and tested on the past
 
 #hand-picked feature groups # FIX: replaces every combination of features (~2^220 subsets, can never finish)
 close_lags = ["Close" + str(c) for c in range(limit)] #"Close" + number so Close Time is not picked up
@@ -64,7 +71,7 @@ for group, combo in feature_groups.items(): # FIX: was for r in range(2, len(fea
     x_subset = df[combo]
     for name, model in models.items(): # FIX: this loop sat outside the combinations loop, so only the last combo of each size was scored
 
-        scores = cross_validate(model, x_subset, y, cv=5, scoring='accuracy') #since y is a boolean we dont use r2 for scoring
+        scores = cross_validate(model, x_subset, y, cv=cv, scoring='accuracy') #since y is a boolean we dont use r2 for scoring # FIX: cv=5 -> TimeSeriesSplit
         results[(name, group)] = scores['test_score'].mean() # FIX: was results[name], overwritten by every feature group
 
         if scores['test_score'].mean() > siu[0]: #loop to return the highest accuracy guy
