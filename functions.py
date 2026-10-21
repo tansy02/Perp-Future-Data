@@ -216,51 +216,7 @@ if __name__ == "__main__": # FIX: this ran (and printed) every time another file
     print(end_time)
 
     #data_extraction_past_v2("BTCUSDT", '1m','5m',end_time,end_time)
-def weight_calculator_csv(data_types, csv_file_path):
-    with open(csv_file_path, mode='r') as file:
-        reader = csv.reader(file)
-        headers = next(reader)
-
-    headers.append('Ignore') #added to fix the while loop 
-    weight_ea = 1.0/len(data_types)
-    weight = []
-    c = 0
-    for i in range(len(data_types)):
-        count = 0
-        try:
-
-            while data_types[i] in headers[c]:
-                count += 1
-                c += 1
-        except(IndexError):
-            continue
-
-        for abc in range(count):
-            weight.append(weight_ea/count)
-
-    return weight
-
-def weight_calculator(data_types, headers):
-
-    headers.append('Ignore') #added to fix the while loop 
-    weight_ea = 1.0/len(data_types)
-    weight = []
-    c = 0
-    for i in range(len(data_types)):
-        count = 0
-        try:
-
-            while data_types[i] in headers[c]:
-                count += 1
-                c += 1
-        except(IndexError):
-            continue
-
-        for abc in range(count):
-            weight.append(weight_ea/count)
-
-    headers.remove('Ignore')
-    return weight
+# FIX: removed weight_calculator_csv and weight_calculator, they gave one weight per feature (used as a per-row sample_weight) and matched names by substring; see CHANGES.md fix 9
 
 
 
