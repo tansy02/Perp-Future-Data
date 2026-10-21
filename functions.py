@@ -8,7 +8,7 @@ from hyperliquid.exchange import Exchange
 from eth_account import Account
 import csv
 from datetime import datetime
-import time
+import calendar # FIX: replaces time, see date_to_milliseconds
 import random
 
 import sqlite3
@@ -17,7 +17,7 @@ import sqlite3
 dt = "2023-10-10 06:00:00"
 def date_to_milliseconds(date_str):  #convert into the format the api takes
     dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
-    return int(time.mktime(dt.timetuple()) * 1000)
+    return int(calendar.timegm(dt.timetuple()) * 1000) # FIX: time.mktime read the date as local time (SGT = UTC+8), Binance timestamps are UTC
 
 def convert_float(DataFrame):
     for col in DataFrame.columns:
