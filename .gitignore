@@ -1,0 +1,7 @@
+#local data, rebuild it with create_db.py + data_miner.py
+*.db
+*.csv
+__pycache__/
+
+#old scratch experiments, kept on my machine only
+irrelevant/
