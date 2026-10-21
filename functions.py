@@ -196,31 +196,32 @@ def zero_infront(value): #change '6' to '06', etc
     return value
 
 
-year = random.randint(2015,2025)
-year = str(year)
+if __name__ == "__main__": # FIX: this ran (and printed) every time another file imported functions.py
+    year = random.randint(2015,2025)
+    year = str(year)
 
-month = random.randint(1,12)
-if month != 2:
-    if month in [1,3,5,7,8,10,12]:
-        day = random.randint(1,31)
+    month = random.randint(1,12)
+    if month != 2:
+        if month in [1,3,5,7,8,10,12]:
+            day = random.randint(1,31)
+        else:
+            day = random.randint(1,30)
     else:
-        day = random.randint(1,30)
-else:
-    day = random.randint(1,28)
+        day = random.randint(1,28)
 
 
-time_ = random.randint(0,23)
-time_ = zero_infront(time_) #for immutable types such as int, str, etc the function cannot change the variable beyond the function
-month = zero_infront(month)
-day = zero_infront(day)
+    time_ = random.randint(0,23)
+    time_ = zero_infront(time_) #for immutable types such as int, str, etc the function cannot change the variable beyond the function
+    month = zero_infront(month)
+    day = zero_infront(day)
 
-print(time_)
+    print(time_)
 
 
-end_time = year + "-" + month + "-" + day + " " + time_ + ":00:00"
-print(end_time)
+    end_time = year + "-" + month + "-" + day + " " + time_ + ":00:00"
+    print(end_time)
 
-#data_extraction_past_v2("BTCUSDT", '1m','5m',end_time,end_time)
+    #data_extraction_past_v2("BTCUSDT", '1m','5m',end_time,end_time)
 def weight_calculator_csv(data_types, csv_file_path):
     with open(csv_file_path, mode='r') as file:
         reader = csv.reader(file)
