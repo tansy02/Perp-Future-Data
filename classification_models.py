@@ -5,7 +5,7 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
 from itertools import combinations
-import ast # FIX: removed unused imports (numpy, accuracy_score, confusion_matrix, csv, weight_calculator)
+# FIX: removed unused imports (numpy, accuracy_score, confusion_matrix, csv, weight_calculator) and ast (cleaning_data.py now casts to float)
 from creating_SQL_DB_angrily import headers
 import sqlite3
 
@@ -35,11 +35,7 @@ df = df.drop_duplicates()
 features = headers
 features.remove('y')
 
-for x in headers: #need to parse data from csv properly
-    try:
-        df[x] = df[x].apply(ast.literal_eval)
-    except (ValueError):
-        continue
+# FIX: removed the ast.literal_eval loop, cells are single numbers stored as TEXT (not lists like the old csv), cleaning_data.py casts them to float
 # FIX: removed weight_set = weight_calculator(data_types,features), never used below
 
 
