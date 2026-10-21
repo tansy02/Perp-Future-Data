@@ -191,7 +191,7 @@ def zero_infront(value): #change '6' to '06', etc
 
 
 if __name__ == "__main__": # FIX: this ran (and printed) every time another file imported functions.py
-    year = random.randint(2015,2025)
+    year = random.randint(2018,2025) # FIX: BTCUSDT spot only starts 17 Aug 2017; earlier dates all returned that same first window
     year = str(year)
 
     month = random.randint(1,12)

@@ -17,7 +17,7 @@ def zero_infront(value):
 
 i = 1
 while i != 0:
-    year = random.randint(2015,2025)
+    year = random.randint(2018,2025) # FIX: BTCUSDT spot only starts 17 Aug 2017; earlier dates all returned that same first window, giving duplicate rows
     year = str(year)
 
     month = random.randint(1,12)
