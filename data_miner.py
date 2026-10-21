@@ -4,7 +4,7 @@ import time
 import sqlite3 # FIX: needed to catch sqlite3.ProgrammingError below
 import requests # FIX: needed to catch requests.exceptions.RequestException below
 from functions import data_extraction_past_v3
-from creating_SQL_DB_angrily import headers
+from create_db import headers # FIX: module renamed from creating_SQL_DB_angrily
 #Generational talent for generating relevant headers
 
 

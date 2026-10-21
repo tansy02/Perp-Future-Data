@@ -7,7 +7,7 @@ from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
 # FIX: removed unused imports (numpy, accuracy_score, confusion_matrix, csv, weight_calculator) and ast (cleaning_data.py now casts to float)
 # FIX: removed itertools.combinations, replaced by feature_groups below
-from creating_SQL_DB_angrily import headers, limit # FIX: limit is needed to build the feature groups
+from create_db import headers, limit # FIX: limit is needed to build the feature groups; module renamed from creating_SQL_DB_angrily
 import sqlite3
 
 # FIX: removed data_types, it only fed weight_calculator whose result (weight_set) was never used
