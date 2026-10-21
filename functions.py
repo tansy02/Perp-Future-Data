@@ -135,8 +135,8 @@ def data_extraction_past_v2(symbol,interval_1,interval_2,start_time1,start_time2
     #print(new_data, "siu")
     new_data.append(y_1m)
     new_data.append(last_close_1m)
-  
-    file_path = r"C:\Leisure\Data Analyst shit\Trading\data_1m.csv"
+
+    file_path = "data_1m.csv" # FIX: was a hardcoded C:\ path, only worked on my laptop
     with open(file_path, mode = 'a', newline = '') as file:
         writer = csv.writer(file)
         writer.writerow(new_data)
@@ -155,7 +155,7 @@ def data_extraction_past_v2(symbol,interval_1,interval_2,start_time1,start_time2
     #print(new_data, "siu")
     new_data.append(y_5m)
     new_data.append(last_close_5m)
-    file_path = r"C:\Leisure\Data Analyst shit\Trading\data_5m.csv"
+    file_path = "data_5m.csv" # FIX: was a hardcoded C:\ path, only worked on my laptop
     with open(file_path, mode = 'a', newline = '') as file:
         writer = csv.writer(file)
         writer.writerow(new_data)
@@ -167,7 +167,7 @@ def data_extraction_past_v2(symbol,interval_1,interval_2,start_time1,start_time2
         new_data = [price_1m[i]]
 
         
-        file_path = r"C:\Leisure\Data Analyst shit\Trading\data_1m.csv"
+        file_path = "data_1m.csv" # FIX: relative path (the old Windows path inside this string also raised an invalid escape warning)
         with open(file_path, mode='a', newline='') as file:
             writer = csv.writer(file)
                 
@@ -177,7 +177,7 @@ def data_extraction_past_v2(symbol,interval_1,interval_2,start_time1,start_time2
     for i in range(len(price_5m)):
         new_data = [price_5m[i]]
 
-        file_path = r"C:\Leisure\Data Analyst shit\Trading\data_5m.csv"
+        file_path = "data_5m.csv" # FIX: relative path
         with open(file_path,mode = 'a', newline = '') as file:
             writre = csv.writer(file)
             writer.writerow(new_data)

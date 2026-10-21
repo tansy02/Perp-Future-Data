@@ -1,5 +1,5 @@
-import csv 
-import sqlite3
+import csv
+# FIX: removed import sqlite3, the only sqlite code was the leftover students table
 
 limit = 20
 data_types= ["Open Time", "Open", "High", "Low", "Close", "Volume",
@@ -21,14 +21,4 @@ with open('data_5m.csv',mode='w', newline = '') as file:
     writer = csv.writer(file)
     writer.writerow(headers)
 
-#connect to (or create a database)
-conn = sqlite3.connect("data_5m.db")
-cursor = conn.cursor()
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS students(
-    name TEXT,
-    age INTEGER,
-    score REAL
-)
-""")
+# FIX: removed the leftover students table (tutorial code) and its connection to data_5m.db
