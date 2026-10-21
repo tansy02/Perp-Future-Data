@@ -1,6 +1,8 @@
 
 import random
 import time
+import sqlite3 # FIX: needed to catch sqlite3.ProgrammingError below
+import requests # FIX: needed to catch requests.exceptions.RequestException below
 from functions import data_extraction_past_v3
 from creating_SQL_DB_angrily import headers
 #Generational talent for generating relevant headers
@@ -50,5 +52,9 @@ while i != 0:
             i = 1
             time.sleep(20)
     except (ZeroDivisionError, IndexError) :
+        continue
+    except (requests.exceptions.RequestException, sqlite3.ProgrammingError) as e: # FIX: network/HTTP errors (incl. rate limits) and windows with fewer than 20 candles used to crash the miner
+        print("skipped:", e)
+        time.sleep(30) #back off so a rate limit does not turn into an IP ban
         continue
 

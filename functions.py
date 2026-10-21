@@ -231,6 +231,7 @@ def data_extraction_past_v3(symbol,interval_1,start_time1,limit,headers): # FIX:
     }
 
     resp = requests.get(url, params=params_1m)
+    resp.raise_for_status() # FIX: a rate limit reply (HTTP 429/418) used to become an empty DataFrame -> IndexError, which data_miner retried instantly
     data_1m = resp.json()
     #print(data_1m)
     price_1m = pd.DataFrame(data_1m, columns=[
@@ -261,6 +262,7 @@ def data_extraction_past_v3(symbol,interval_1,start_time1,limit,headers): # FIX:
         "limit": 3
     }
     resp = requests.get(url, params = params_1m)
+    resp.raise_for_status() # FIX: same as above, fail loudly on HTTP errors
     data_1m = resp.json()
 
     data_1m = pd.DataFrame(data_1m, columns = [ # FIX: was built from data_5m (the 20 historical 5m candles), not the future 1m candles
