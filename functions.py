@@ -97,7 +97,7 @@ def data_extraction_past_v2(symbol,interval_1,interval_2,start_time1,start_time2
     resp = requests.get(url, params = params_1m)
     data_1m = resp.json()
 
-    data_1m = pd.DataFrame(data_5m, columns = [
+    data_1m = pd.DataFrame(data_1m, columns = [ # FIX: was built from data_5m (the 20 historical 5m candles), not the future 1m candles
         "Open Time", "Open", "High", "Low", "Close", "Volume",
         "Close Time", "Quote Asset Volume", "Trades",
         "Taker Buy Base", "Taker Buy Quote", "Ignore"])
@@ -343,7 +343,7 @@ def data_extraction_past_v3(symbol,interval_1,interval_2,start_time1,start_time2
     resp = requests.get(url, params = params_1m)
     data_1m = resp.json()
 
-    data_1m = pd.DataFrame(data_5m, columns = [
+    data_1m = pd.DataFrame(data_1m, columns = [ # FIX: was built from data_5m (the 20 historical 5m candles), not the future 1m candles
         "Open Time", "Open", "High", "Low", "Close", "Volume",
         "Close Time", "Quote Asset Volume", "Trades",
         "Taker Buy Base", "Taker Buy Quote","Ignore"])
