@@ -1,5 +1,4 @@
-import csv 
-import sqlite3
+import sqlite3 # FIX: removed unused import csv
 
 limit = 20
 data_types= ["Open Time", "Open", "High", "Low", "Close", "Volume",

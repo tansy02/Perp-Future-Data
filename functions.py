@@ -1,11 +1,5 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-import requests
-from hyperliquid.info import Info
-from hyperliquid.utils import constants
-from hyperliquid.exchange import Exchange
-from eth_account import Account
+import requests # FIX: removed unused imports (matplotlib, numpy, hyperliquid x3, eth_account)
 import csv
 from datetime import datetime
 import calendar # FIX: replaces time, see date_to_milliseconds
@@ -14,7 +8,7 @@ import random
 import sqlite3
 
 
-dt = "2023-10-10 06:00:00"
+# FIX: removed unused global dt = "2023-10-10 06:00:00" (shadowed by the local dt below)
 def date_to_milliseconds(date_str):  #convert into the format the api takes
     dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
     return int(calendar.timegm(dt.timetuple()) * 1000) # FIX: time.mktime read the date as local time (SGT = UTC+8), Binance timestamps are UTC

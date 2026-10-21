@@ -4,18 +4,12 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
-import numpy as np
 from itertools import combinations
-from sklearn.metrics import accuracy_score, confusion_matrix
-import ast
-import csv
-from functions import weight_calculator
+import ast # FIX: removed unused imports (numpy, accuracy_score, confusion_matrix, csv, weight_calculator)
 from creating_SQL_DB_angrily import headers
 import sqlite3
 
-#weight calculating of the data
-data_types = ['Open_Time','Open','High','Low','Close','Volume','Close_Time','Quote_Asset_Volume',
-            'Trades','Taker_Buy_Base','Taker_Buy_Quote','last_close']
+# FIX: removed data_types, it only fed weight_calculator whose result (weight_set) was never used
 
 models = {
     "Logistics Regression": LogisticRegression(),
@@ -46,7 +40,7 @@ for x in headers: #need to parse data from csv properly
         df[x] = df[x].apply(ast.literal_eval)
     except (ValueError):
         continue
-weight_set = weight_calculator(data_types,features)
+# FIX: removed weight_set = weight_calculator(data_types,features), never used below
 
 
 y = (df['y'] >df['last_close']).astype(int) #converting y into boolean
