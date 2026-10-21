@@ -52,7 +52,7 @@ def data_extraction_past_v2(symbol,interval_1,interval_2,start_time1,start_time2
 
     #end_1m to be used in predicting data
     siu = len(price_1m) -1
-    end_1m = price_1m[siu][0] #returns the latest time frame
+    end_1m = price_1m[siu][6] + 1 # FIX: was the last bar's Open Time; startTime is inclusive so the label window contained the current bar. Close Time + 1 ms = open of the next bar
     last_close_1m = price_1m[siu][4]
     last_close_1m =float(last_close_1m)
 
@@ -83,7 +83,7 @@ def data_extraction_past_v2(symbol,interval_1,interval_2,start_time1,start_time2
 
     #Time frame returning time
     siu = len(price_5m) -1
-    end_5m = price_5m[siu][0]
+    end_5m = price_5m[siu][6] + 1 # FIX: was the last bar's Open Time (same leak as end_1m); Close Time + 1 ms = open of the next bar
     last_close_5m = price_5m[siu][4]
     last_close_5m =float(last_close_5m)
 
@@ -297,7 +297,7 @@ def data_extraction_past_v3(symbol,interval_1,interval_2,start_time1,start_time2
 
     #end_1m to be used in predicting data
     siu = len(price_1m) -1
-    end_1m = price_1m[siu][0] #returns the latest time frame
+    end_1m = price_1m[siu][6] + 1 # FIX: was the last bar's Open Time; startTime is inclusive so the label window contained the current bar. Close Time + 1 ms = open of the next bar
     last_close_1m = price_1m[siu][4]
     last_close_1m =float(last_close_1m)
 
@@ -329,7 +329,7 @@ def data_extraction_past_v3(symbol,interval_1,interval_2,start_time1,start_time2
 
     #Time frame returning time
     siu = len(price_5m) -1
-    end_5m = price_5m[siu][0]
+    end_5m = price_5m[siu][6] + 1 # FIX: was the last bar's Open Time (same leak as end_1m); Close Time + 1 ms = open of the next bar
     last_close_5m = price_5m[siu][4]
     last_close_5m =float(last_close_5m)
 
